@@ -78,6 +78,10 @@ bool GameEngine::Frame()
 		DirectX->camZ -= .5f;
 	if (Input->isKeyDown(0x53))
 		DirectX->camZ += .5f;
+	if (Input->isKeyDown(VK_SPACE))
+		DirectX->camY += .5f;
+	if (Input->isKeyDown(VK_CONTROL))
+		DirectX->camY -= .5f;
 
 	DirectX->RenderFrame();
 	return true;

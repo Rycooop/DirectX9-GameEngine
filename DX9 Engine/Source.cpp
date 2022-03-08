@@ -3,7 +3,7 @@
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR nCmdLine, int nCmdShow)
 {
-	GameEngine* Engine = new GameEngine(600, 600);
+	GameEngine* Engine = new GameEngine(1000, 800);
 	if (!Engine)
 		return 0;
 

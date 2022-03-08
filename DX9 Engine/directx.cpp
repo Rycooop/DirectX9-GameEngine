@@ -38,36 +38,32 @@ bool D3D::Initialize(HWND hwnd, int w, int h)
 		return false;
 
 	this->InitGraphics();
-	d3ddev->SetRenderState(D3DRS_LIGHTING, FALSE);
+	this->InitLights();
+	d3ddev->SetRenderState(D3DRS_LIGHTING, TRUE);
+	d3ddev->SetRenderState(D3DRS_AMBIENT, D3DCOLOR_XRGB(50, 50, 50));
 	d3ddev->SetRenderState(D3DRS_ZENABLE, TRUE);
 	d3ddev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+	d3ddev->SetRenderState(D3DRS_NORMALIZENORMALS, TRUE);
 
 	return true;
 }
 
 bool D3D::InitGraphics()
 {
-	CUSTOMVERTEX vertices[] =
-	{
-		 { -3.0f, 3.0f, -3.0f, D3DCOLOR_XRGB(0, 0, 255), },    // vertex 0
-		{ 3.0f, 3.0f, -3.0f, D3DCOLOR_XRGB(0, 255, 0), },     // vertex 1
-		{ -3.0f, -3.0f, -3.0f, D3DCOLOR_XRGB(255, 0, 0), },   // 2
-		{ 3.0f, -3.0f, -3.0f, D3DCOLOR_XRGB(0, 255, 255), },  // 3
-		{ -3.0f, 3.0f, 3.0f, D3DCOLOR_XRGB(0, 0, 255), },     // ...
-		{ 3.0f, 3.0f, 3.0f, D3DCOLOR_XRGB(255, 0, 0), },
-		{ -3.0f, -3.0f, 3.0f, D3DCOLOR_XRGB(0, 255, 0), },
-		{ 3.0f, -3.0f, 3.0f, D3DCOLOR_XRGB(0, 255, 255), },
-	};
+	VOID* pVoid;
 
-	// create a vertex buffer interface called v_buffer
-	d3ddev->CreateVertexBuffer(8 * sizeof(CUSTOMVERTEX),
+	d3ddev->CreateVertexBuffer(20 * sizeof(CUSTOMVERTEX), 0, CUSTOMFVF, D3DPOOL_MANAGED, &pyramidBuffer, NULL);
+	pyramidBuffer->Lock(0, 0, (void**)&pVoid, 0);
+	memcpy(pVoid, pyramidVertexBuffer, sizeof(pyramidVertexBuffer));
+	pyramidBuffer->Unlock();
+	
+	d3ddev->CreateVertexBuffer(24 * sizeof(CUSTOMVERTEX),
 		0,
 		CUSTOMFVF,
 		D3DPOOL_MANAGED,
 		&vBuffer,
 		NULL);
 
-	VOID* pVoid;    // a void pointer
 
 	// lock v_buffer and load the vertices into it
 	vBuffer->Lock(0, 0, (void**)&pVoid, 0);
@@ -76,32 +72,31 @@ bool D3D::InitGraphics()
 
 	CUSTOMVERTEX terrainVertices[] =
 	{
-		{-20.f, 0.f, -20.f, D3DCOLOR_XRGB(100, 200, 100), },
-		{20.f, 0.f, -20.f, D3DCOLOR_XRGB(100, 200, 100), },
-		{-20.f, 0.f, 20.f, D3DCOLOR_XRGB(100, 200, 100), },
-		{20.f, 0.f, 20.f, D3DCOLOR_XRGB(100, 200, 100), },
+		{-20.f, -10.f, -20.f, 0.f, 1.f, 0.f, },
+		{20.f, -10.f, -20.f, 0.f, 1.f, 0.f, },
+		{-20.f, -10.f, 20.f, 0.f, 1.f, 0.f, },
+		{20.f, -10.f, 20.f, 0.f, 1.f, 0.f, },
 	};
 
-	VOID* tpVoid;
 	d3ddev->CreateVertexBuffer(4 * sizeof(CUSTOMVERTEX), 0, CUSTOMFVF, D3DPOOL_MANAGED, &terrainBuffer, NULL);
-	terrainBuffer->Lock(0, 0, (void**)&tpVoid, 0);
-	memcpy(tpVoid, terrainVertices, sizeof(terrainVertices));
+	terrainBuffer->Lock(0, 0, (void**)&pVoid, 0);
+	memcpy(pVoid, terrainVertices, sizeof(terrainVertices));
 	terrainBuffer->Unlock();
 
 	short indices[] =
 	{
 		0, 1, 2,    // side 1
 		2, 1, 3,
-		4, 0, 6,    // side 2
-		6, 0, 2,
-		7, 5, 6,    // side 3
-		6, 5, 4,
-		3, 1, 7,    // side 4
-		7, 1, 5,
-		4, 5, 0,    // side 5
-		0, 5, 1,
-		3, 7, 2,    // side 6
-		2, 7, 6,
+		4, 5, 6,    // side 2
+		6, 5, 7,
+		8, 9, 10,    // side 3
+		10, 9, 11,
+		12, 13, 14,    // side 4
+		14, 13, 15,
+		16, 17, 18,    // side 5
+		18, 17, 19,
+		20, 21, 22,    // side 6
+		22, 21, 23,
 	};
 
 	// create an index buffer interface called i_buffer
@@ -117,7 +112,50 @@ bool D3D::InitGraphics()
 	memcpy(pVoid, indices, sizeof(indices));
 	iBuffer->Unlock();
 
+	short pIndices[] =
+	{
+		0, 1, 2,
+		1, 2, 3,
+		0, 1, 4,
+		1, 2, 4,
+		2, 3, 4,
+	};
+
+	d3ddev->CreateIndexBuffer(15 * sizeof(short), 0, D3DFMT_INDEX16, D3DPOOL_MANAGED, &pyramidIndexBuffer, NULL);
+	pyramidIndexBuffer->Lock(0, 0, (void**)&pVoid, 0);
+	memcpy(pVoid, pIndices, sizeof(pIndices));
+	pyramidIndexBuffer->Unlock();
+
 	return true;
+}
+
+void D3D::InitLights()
+{
+	D3DLIGHT9 light, light1;
+	D3DMATERIAL9 material;
+
+	ZeroMemory(&light, sizeof(D3DLIGHT9));
+	light.Type = D3DLIGHT_DIRECTIONAL;
+	light.Diffuse = D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f);    // set the light's color
+	light.Direction = D3DXVECTOR3(1.0f, -.3f, -1.0f);
+	ZeroMemory(&light1, sizeof(D3DLIGHT9));
+	light1.Type = D3DLIGHT_POINT;
+	light1.Diffuse = D3DXCOLOR(0.f, 1.f, 0.5f, 1.0f);    // set the light's color
+	light.Position = D3DXVECTOR3(20.0f, 0.0f, -1.0f);
+	light.Range = 100.0f;    // a range of 100
+	light.Attenuation0 = 0.0f;    // no constant inverse attenuation
+	light.Attenuation1 = 0.125f;    // only .125 inverse attenuation
+	light.Attenuation2 = 0.0f;
+
+	//d3ddev->SetLight(0, &light);    // send the light struct properties to light #0
+	d3ddev->SetLight(0, &light);    // send the light struct properties to light #0
+	d3ddev->LightEnable(0, TRUE);    // turn on light #0
+
+	ZeroMemory(&material, sizeof(D3DMATERIAL9));    // clear out the struct for use
+	material.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);    // set diffuse color to white
+	material.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);    // set ambient color to white
+
+	d3ddev->SetMaterial(&material);
 }
 
 void D3D::RenderFrame()
@@ -148,23 +186,36 @@ void D3D::RenderFrame()
 	d3ddev->SetTransform(D3DTS_PROJECTION, &projectionMatrix);    // set the projection
 
 
-	static float index = 0.0f; index += 0.05f;    // an ever-increasing float value
-	// build a matrix to rotate the model based on the increasing float value
+	static float index = 0.0f; index += 0.003f; 
+
+
+	//Terrain
 	D3DXMatrixRotationY(&matRotateX, 0);
 	d3ddev->SetTransform(D3DTS_WORLD, &matRotateX);
-
 
 	d3ddev->SetStreamSource(0, this->terrainBuffer, 0, sizeof(CUSTOMVERTEX));
 	d3ddev->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
 
-	// select the vertex buffer to display and draw
+	
+	//Cube
 	d3ddev->SetStreamSource(0, this->vBuffer, 0, sizeof(CUSTOMVERTEX));
 	d3ddev->SetIndices(iBuffer);
 
 	D3DXMatrixRotationY(&matRotateX, index);
 	d3ddev->SetTransform(D3DTS_WORLD, &matRotateX);
-	
-	d3ddev->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 8, 0, 12);
+	d3ddev->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 24, 0, 12);
+
+
+	//Pyramid
+	D3DXMatrixScaling(&matScale, index, index, index);
+	D3DXMatrixRotationY(&matRotateX, 0);
+	D3DXMatrixRotationX(&matRotateX, index);
+	D3DXMATRIX finalMatrix = matScale * matRotateX;
+	d3ddev->SetTransform(D3DTS_WORLD, &finalMatrix);
+
+	d3ddev->SetStreamSource(0, this->pyramidBuffer, 0, sizeof(CUSTOMVERTEX));
+	d3ddev->SetIndices(pyramidIndexBuffer);
+	d3ddev->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 5, 0, 6);
 
 	d3ddev->EndScene();
 	d3ddev->Present(NULL, NULL, NULL, NULL);
