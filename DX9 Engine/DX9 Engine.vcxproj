@@ -143,15 +143,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="camera.cpp" />
     <ClCompile Include="directx.cpp" />
     <ClCompile Include="engine.cpp" />
+    <ClCompile Include="graphics.cpp" />
+    <ClCompile Include="graphics.h" />
     <ClCompile Include="input.cpp" />
+    <ClCompile Include="lights.cpp" />
+    <ClCompile Include="model.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="camera.h" />
     <ClInclude Include="directx.h" />
     <ClInclude Include="engine.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="lights.h" />
+    <ClInclude Include="model.h" />
+    <ClInclude Include="texture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

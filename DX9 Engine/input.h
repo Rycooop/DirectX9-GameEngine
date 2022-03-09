@@ -1,4 +1,8 @@
+#ifndef INPUT_CLASS
+#define INPUT_CLASS
 
+
+//Will be expanding to take mouse input
 
 class EngineInput
 {
@@ -17,3 +21,5 @@ private:
 	int isActive;
 	bool m_keys[256];
 };
+
+#endif

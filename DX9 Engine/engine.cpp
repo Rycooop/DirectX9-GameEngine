@@ -3,7 +3,7 @@
 
 GameEngine::GameEngine()
 {
-	this->DirectX = 0;
+	this->Graphics = 0;
 	this->Input = 0;
 	this->m_hwnd = 0;
 	this->m_hinstance = GetModuleHandle(NULL);
@@ -13,7 +13,7 @@ GameEngine::GameEngine()
 
 GameEngine::GameEngine(int width, int height)
 {
-	this->DirectX = 0;
+	this->Graphics = 0;
 	this->m_hwnd = 0;
 	this->m_hinstance = GetModuleHandle(NULL);
 	this->windowWidth = width;
@@ -25,11 +25,11 @@ bool GameEngine::Initialize()
 	int screenWidth, screenHeight;
 	bool result = this->InitializeWindow(this->m_hwnd, screenWidth, screenHeight);
 
-	this->DirectX = new D3D;
-	if (!DirectX)
+	this->Graphics = new EngineGraphics;
+	if (!Graphics)
 		return false;
 
-	if (!DirectX->Initialize(this->m_hwnd, this->windowWidth, this->windowHeight))
+	if (!Graphics->InitializeGraphics(this->m_hwnd, this->windowWidth, this->windowHeight))
 	{
 		return false;
 	}
@@ -65,8 +65,6 @@ void GameEngine::Run()
 		if (!this->Frame())
 			running = false;
 	}
-
-	this->Shutdown();
 }
 
 bool GameEngine::Frame()
@@ -75,22 +73,23 @@ bool GameEngine::Frame()
 	if (Input->isKeyDown(VK_ESCAPE))
 		return false;
 	if (Input->isKeyDown(0x57))
-		DirectX->camZ -= .5f;
+		Graphics->Cam->camZ -= .5f;
 	if (Input->isKeyDown(0x53))
-		DirectX->camZ += .5f;
+		Graphics->Cam->camZ += .5f;
 	if (Input->isKeyDown(VK_SPACE))
-		DirectX->camY += .5f;
+		Graphics->Cam->camY+= .5f;
 	if (Input->isKeyDown(VK_CONTROL))
-		DirectX->camY -= .5f;
+		Graphics->Cam->camY -= .5f;
 
-	DirectX->RenderFrame();
+	Graphics->Render();
 	return true;
 }
 
 bool GameEngine::Shutdown()
 {
-	delete DirectX;
-	this->DirectX = 0;
+	this->Graphics->Shutdown();
+	delete Graphics;
+	this->Graphics = 0;
 
 	this->Input->Cleanup();
 	delete Input;

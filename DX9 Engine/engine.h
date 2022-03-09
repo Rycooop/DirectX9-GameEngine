@@ -1,7 +1,10 @@
+#ifndef ENGINE_HEADER
+#define ENGINE_HEADER
+
 #define WIN32_LEAN_AND_MEAN
 
 #include <Windows.h>
-#include "directx.h"
+#include "graphics.h"
 #include "input.h"
 
 
@@ -23,7 +26,7 @@ private:
 	bool ShutdownWindow();
 
 private:
-	D3D* DirectX;
+	EngineGraphics* Graphics;
 	EngineInput* Input;
 
 	HWND m_hwnd;
@@ -34,3 +37,6 @@ private:
 
 static GameEngine* ApplicationHandle = 0;
 static LRESULT CALLBACK WindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
+
+
+#endif
