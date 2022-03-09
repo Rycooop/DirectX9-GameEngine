@@ -31,7 +31,7 @@ bool EngineGraphics::InitializeGraphics(HWND hwnd, int w, int h)
 	this->g_models = new Models();
 	if (!g_models)
 		return false;
-
+	
 	g_models->InitializeModels(g_devcon);
 
 	this->Cam = new Camera();
@@ -79,11 +79,12 @@ bool EngineGraphics::Render()
 	g_devcon->SetTransform(D3DTS_PROJECTION, &this->projectionMatrix);
 
 	//Terrain
-	g_devcon->SetStreamSource(0, g_models->terrainBuffer, 0, sizeof(Models::CUSTOMVERTEX));
+	g_devcon->SetFVF(TEXTUREFVF);
+	g_devcon->SetStreamSource(0, g_models->terrainBuffer, 0, sizeof(Texture::TEXTUREVERTEX));
+	g_devcon->SetTexture(0, g_models->m_Textures->grassTexture);
 	g_devcon->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
 
 	//Cube
-	g_devcon->SetFVF(TEXTUREFVF);
 	g_devcon->SetTexture(0, g_models->m_Textures->brickTexture);
 
 	//Rotate cube

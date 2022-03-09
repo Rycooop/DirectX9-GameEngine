@@ -20,7 +20,7 @@ public:
 	bool CreateTextures(LPDIRECT3DDEVICE9 devcon);
 
 public:
-	LPDIRECT3DTEXTURE9 brickTexture;
+	LPDIRECT3DTEXTURE9 brickTexture, grassTexture;
 
 	struct TEXTUREVERTEX
 	{

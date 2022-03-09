@@ -43,8 +43,8 @@ private:
 const static Texture::TEXTUREVERTEX terrainVertices[] =
 {
 	{-20.f, -10.f, -20.f, D3DCOLOR_XRGB(255, 255, 255), 0.f, 0.f, },
-	{20.f, -10.f, -20.f, D3DCOLOR_XRGB(255, 255, 255), 1.f, 0.f, },
-	{-20.f, -10.f, 20.f, D3DCOLOR_XRGB(255, 255, 255), 0.f, 1.f, },
+	{20.f, -10.f, -20.f, D3DCOLOR_XRGB(255, 255, 255), 0.f, 1.f, },
+	{-20.f, -10.f, 20.f, D3DCOLOR_XRGB(255, 255, 255), 1.f, 0.f, },
 	{20.f, -10.f, 20.f, D3DCOLOR_XRGB(255, 255, 255), 1.f, 1.f, },
 };
 
@@ -55,10 +55,10 @@ const static Texture::TEXTUREVERTEX vertices[] =
 { -3.0f, 3.0f, 3.0f, D3DCOLOR_XRGB(255, 255, 255), 0.0f, 1.0f, },
 { 3.0f, 3.0f, 3.0f, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 1.0f, },
 
-{ -3.0f, -3.0f, -3.0f, D3DCOLOR_XRGB(255, 255, 255), 0.0f, -1.0f, },    // side 2
-{ -3.0f, 3.0f, -3.0f, D3DCOLOR_XRGB(255, 255, 255), 0.0f, -1.0f, },
-{ 3.0f, -3.0f, -3.0f, D3DCOLOR_XRGB(255, 255, 255), 0.0f, -1.0f, },
-{ 3.0f, 3.0f, -3.0f, D3DCOLOR_XRGB(255, 255, 255), 0.0f, -1.0f, },
+{ -3.0f, -3.0f, -3.0f, D3DCOLOR_XRGB(255, 255, 255), 0.0f, 0.0f, },    // side 2
+{ -3.0f, 3.0f, -3.0f, D3DCOLOR_XRGB(255, 255, 255), 0.0f, 1.0f, },
+{ 3.0f, -3.0f, -3.0f, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0.0f, },
+{ 3.0f, 3.0f, -3.0f, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 1.0f, },
 
 { -3.0f, 3.0f, -3.0f, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0.0f, },    // side 3
 { -3.0f, 3.0f, 3.0f, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0.0f, },
@@ -71,14 +71,14 @@ const static Texture::TEXTUREVERTEX vertices[] =
 { 3.0f, -3.0f, 3.0f, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0.0f, },
 
 { 3.0f, -3.0f, -3.0f, D3DCOLOR_XRGB(255, 255, 255), 0.0f, 0.0f, },    // side 5
-{ 3.0f, 3.0f, -3.0f, D3DCOLOR_XRGB(255, 255, 255), 0.0f, 0.0f, },
-{ 3.0f, -3.0f, 3.0f, D3DCOLOR_XRGB(255, 255, 255), 0.0f, 0.0f, },
-{ 3.0f, 3.0f, 3.0f, D3DCOLOR_XRGB(255, 255, 255), 0.0f, 0.0f, },
+{ 3.0f, 3.0f, -3.0f, D3DCOLOR_XRGB(255, 255, 255), 0.0f, 1.0f, },
+{ 3.0f, -3.0f, 3.0f, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0.0f, },
+{ 3.0f, 3.0f, 3.0f, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 1.0f, },
 
 { -3.0f, -3.0f, -3.0f, D3DCOLOR_XRGB(255, 255, 255), 0.0f, 0.0f, },    // side 6
-{ -3.0f, -3.0f, 3.0f, D3DCOLOR_XRGB(255, 255, 255), 0.0f, 0.0f, },
-{ -3.0f, 3.0f, -3.0f, D3DCOLOR_XRGB(255, 255, 255), 0.0f, 0.0f, },
-{ -3.0f, 3.0f, 3.0f, D3DCOLOR_XRGB(255, 255, 255), 0.0f, 0.0f, },
+{ -3.0f, -3.0f, 3.0f, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0.0f, },
+{ -3.0f, 3.0f, -3.0f, D3DCOLOR_XRGB(255, 255, 255), 0.0f, 1.0f, },
+{ -3.0f, 3.0f, 3.0f, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 1.0f, },
 };
 
 const static Models::CUSTOMVERTEX pyramidVertexBuffer[] =

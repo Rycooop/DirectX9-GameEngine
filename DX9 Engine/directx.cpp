@@ -46,7 +46,7 @@ bool D3D::InitGraphics()
 {
 	//settings for the 3D environment
 	d3ddev->SetRenderState(D3DRS_LIGHTING, TRUE);
-	d3ddev->SetRenderState(D3DRS_AMBIENT, D3DCOLOR_XRGB(50, 50, 50));
+	d3ddev->SetRenderState(D3DRS_AMBIENT, D3DCOLOR_XRGB(100, 100, 100));
 	d3ddev->SetRenderState(D3DRS_ZENABLE, TRUE);
 	d3ddev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	d3ddev->SetRenderState(D3DRS_NORMALIZENORMALS, TRUE);
